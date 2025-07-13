@@ -26,4 +26,19 @@ A RESTful To-Do List / Task Manager API built with **Object-Oriented PHP**, **My
 ---
 
 ## 📂 Folder Structure
-
+task-manager/
+├── index.php
+├── composer.json
+├── src/
+│   ├── Core/
+│   │   └── Router.php
+│   ├── Controllers/
+│   │   └── TaskController.php
+│   ├── Models/
+│   │   └── Task.php
+│   └── Database/
+│       └── DB.php
+├── public/
+│   └── index.html  ← (optional frontend)
+├── .htaccess
+├── README.md
