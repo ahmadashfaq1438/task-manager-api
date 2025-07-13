@@ -27,7 +27,7 @@
               <option value="open">Open</option>
               <option value="in_progress">In Progress</option>
               <option value="cancel">Cancel</option>
-              <option value="completed">Completed</option>
+              <option value="complete">Completed</option>
             </select>
           </div>
           <div class="col-md-2 d-grid">
@@ -48,7 +48,7 @@
         <option value="open">Open</option>
         <option value="in_progress">In Progress</option>
         <option value="cancel">Cancel</option>
-        <option value="completed">Completed</option>
+        <option value="complete">Completed</option>
       </select>
     </div>
 
@@ -62,7 +62,8 @@
             <th>Title</th>
             <th>Description</th>
             <th>Status</th>
-            <th></th>
+            <th>Actions</th>
+            <th>Mark as complete</th>
           </tr>
         </thead>
         <tbody id="taskList"></tbody>
@@ -87,7 +88,6 @@
     </div>
   </div>
 </div>
-
 
 <script src="dist/js/bootstrap.bundle.min.js"></script>
 
@@ -125,6 +125,9 @@
                 </button>
               </div>
             </td>
+            <td>
+              <input type="checkbox" ${task.status === 'complete' ? 'checked' : ''} onchange="toggleStatus(${task.id}, this.checked)">
+            </td>
         `;
         list.appendChild(row);
       });
@@ -133,7 +136,7 @@
 
   function getBadgeColor(status) {
     switch (status) {
-    case 'completed': return 'success';
+    case 'complete': return 'success';
     case 'in_progress': return 'warning';
     case 'cancel': return 'warning';
     case 'open':
@@ -181,6 +184,17 @@
     deleteId = id;
     const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
     modal.show();
+  }
+
+  function toggleStatus(id, isChecked) {
+    const newStatus = isChecked ? 'complete' : 'open';
+    fetch(`${apiUrl}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    })
+    .then(res => res.json())
+    .then(() => loadTasks());
   }
 
   document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
